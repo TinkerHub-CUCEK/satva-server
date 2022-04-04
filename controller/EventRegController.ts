@@ -1,5 +1,5 @@
 import express from 'express';
-import {verifyAdmin} from '../auth';
+import {verifyCaptain} from '../auth';
 import {EventRegModel} from '../models/EventRegModel';
 import {checkRequired} from '../Utility';
 
@@ -8,7 +8,7 @@ export async function addRegistraion(
   res: express.Response,
 ) {
   try {
-    verifyAdmin(req);
+    verifyCaptain(req);
     checkRequired(req.body, ['eventId', 'userId', 'sem', 'branch']);
     const {eventId, userId, sem, branch} = req.body;
 

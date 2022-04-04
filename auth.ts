@@ -1,18 +1,23 @@
-import {NextFunction, Request, Response} from 'express';
-import {verifyUserAuth} from './controller/users/Users';
+import {Request} from 'express';
+import {UserModel} from './models/UserModel';
+import {hashString} from './Utility';
 
-const verifyUser = async (req: Request, res: Response) => {
-  // User Auth
+export const verifyCaptain = async (req: Request) => {
   try {
     const {username, password} = req.body;
-    await verifyUserAuth(username, password);
-  } catch (e) {
-    /* handle error */
-    res.status(500).json({status: false, message: e});
-    return false;
-  }
+    const usr = await UserModel.findOne({
+      name: username,
+      password: hashString(password),
+      isCaptain: true,
+    });
 
-  return true;
+    if (!usr) {
+      throw 'User not captain';
+    }
+  } catch (e) {
+    console.error('auth::Error in verifyCaptain', e);
+    throw e;
+  }
 };
 
 export const verifyAdmin = (req: Request) => {
@@ -21,24 +26,3 @@ export const verifyAdmin = (req: Request) => {
     throw 'Wrong Admin Password';
   }
 };
-
-// export async function authorize(
-//   req: Request,
-//   res: Response,
-//   next: NextFunction,
-// ) {
-//   let accessDenied = true;
-//   // Login and Get req does not require auth
-//   if (req.path === '/users/login' || req.method === 'GET') {
-//     accessDenied = false;
-//   } else if (req.path.split('/')[1] === 'wazirx') {
-//     accessDenied = !(await verifyUser(req, res));
-//     // accessDenied = true;
-//   } else {
-//     accessDenied = !verifyAdmin(req, res);
-//   }
-
-//   if (!accessDenied) {
-//     next();
-//   }
-// }

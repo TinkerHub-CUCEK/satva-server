@@ -1,9 +1,11 @@
 import express from 'express';
+import {verifyAdmin} from '../auth';
 import {EventModel} from '../models/EventModel';
 import {checkRequired} from '../Utility';
 
 export async function createEvent(req: express.Request, res: express.Response) {
   try {
+    verifyAdmin(req);
     checkRequired(req.body, [
       'name',
       'startTime',
@@ -32,6 +34,7 @@ export async function createEvent(req: express.Request, res: express.Response) {
 
 export async function updateEvent(req: express.Request, res: express.Response) {
   try {
+    verifyAdmin(req);
     checkRequired(req.body, ['name']);
     const {name, startTime, endTime, maxUsersPerTeam, minUsersPerTeam} =
       req.body;
@@ -55,7 +58,7 @@ export async function updateEvent(req: express.Request, res: express.Response) {
   }
 }
 
-export async function listEvents(req: express.Request, res: express.Response) {
+export async function listEvents(_req: express.Request, res: express.Response) {
   try {
     const events = await EventModel.find({});
     res.status(200).json({status: true, data: events});
