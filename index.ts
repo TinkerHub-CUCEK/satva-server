@@ -9,7 +9,6 @@ dotenv.config();
 initDB();
 
 // import {authorize} from './auth';
-
 const port = process.env.PORT;
 
 const app = express();
