@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import {initDB} from './db/db';
 import UserRouter from './routes/UserRoutes';
+import EventRouter from './routes/EventRoutes';
 
 dotenv.config();
 initDB();
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 app.get('/', (_req, res) => res.send('Hello World!'));
 
 app.use('/user', UserRouter);
+app.use('/events', EventRouter);
 
 app.listen(port, () => {
   console.log(`app listening at port ${port}`);
