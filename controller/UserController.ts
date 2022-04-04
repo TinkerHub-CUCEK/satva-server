@@ -1,5 +1,6 @@
 import fetch from 'cross-fetch';
 import express from 'express';
+import {verifyAdmin} from '../auth';
 import {UserModel} from '../models/UserModel';
 import {checkRequired, hashString, sendMail} from '../Utility';
 
@@ -33,8 +34,9 @@ export async function appointAsBranchCaptain(
   res: express.Response,
 ) {
   try {
-    checkRequired(req.body, ['email', 'branch', 'adminPass']);
-    const {email, branch, adminPass} = req.body;
+    verifyAdmin(req);
+    checkRequired(req.body, ['email', 'branch']);
+    const {email, branch} = req.body;
     const user = await UserModel.findOne({email: email});
     const existingCaptain = await UserModel.findOne({
       branch: branch,

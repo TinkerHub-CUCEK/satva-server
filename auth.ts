@@ -15,6 +15,13 @@ const verifyUser = async (req: Request, res: Response) => {
   return true;
 };
 
+export const verifyAdmin = (req: Request) => {
+  const {adminPass} = req.body;
+  if (adminPass !== process.env.PASS) {
+    throw 'Wrong Admin Password';
+  }
+};
+
 // export async function authorize(
 //   req: Request,
 //   res: Response,
