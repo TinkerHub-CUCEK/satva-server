@@ -1,4 +1,5 @@
 import fetch from 'cross-fetch';
+import {randomInt} from 'crypto';
 import express from 'express';
 import {verifyAdmin} from '../auth';
 import {UserModel} from '../models/UserModel';
@@ -18,9 +19,9 @@ export async function registerUser(
     doc.branch = branch;
     doc.email = email;
     doc.password = hashString(password);
-    doc.otp = '8086';
+    doc.otp = String(randomInt(1000, 9999));
 
-    await sendMail(email, 'OTP for Satva', '8086');
+    await sendMail(email, 'OTP for Satva', doc.otp);
     await doc.save();
     res.status(200).json({status: true, message: 'User Regissterd'});
   } catch (e) {
