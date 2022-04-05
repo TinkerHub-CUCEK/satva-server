@@ -54,6 +54,9 @@ export function checkRequired(obj: {[key: string]: any}, values: string[]) {
 }
 
 export function hashString(string: string) {
+  if (!string) {
+    return '';
+  }
   let hash = 0;
   let i;
   let chr;

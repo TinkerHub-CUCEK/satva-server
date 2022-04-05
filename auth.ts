@@ -38,8 +38,8 @@ export const verifyCaptain = async (req: Request) => {
 };
 
 export const verifyAdmin = (req: Request) => {
-  const {adminPass} = req.body;
-  if (adminPass !== process.env.PASS) {
+  const {adminpass} = req.body;
+  if (adminpass !== process.env.PASS) {
     throw 'Wrong Admin Password';
   }
 };
