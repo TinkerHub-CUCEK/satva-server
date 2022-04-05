@@ -6,9 +6,6 @@ export interface User extends Document {
   password: string;
   branch: string;
   sem: number;
-  isVerified: boolean;
-  otp: string;
-  isCaptain: boolean;
 }
 
 const userModel = new Schema<User>({
@@ -18,14 +15,8 @@ const userModel = new Schema<User>({
     unique: true,
   },
   password: String,
-  isVerified: {
-    type: Boolean,
-    default: false,
-  },
-  otp: String,
   branch: String,
   sem: Number,
-  isCaptain: Boolean,
 });
 
 export const UserModel = model<User>('user', userModel);
