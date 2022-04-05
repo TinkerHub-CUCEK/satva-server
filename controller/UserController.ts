@@ -21,11 +21,48 @@ export async function registerUser(
     doc.password = hashString(password);
     doc.otp = String(randomInt(1000, 9999));
 
-    await sendMail(email, 'OTP for Satva', doc.otp);
     await doc.save();
+    await sendMail(email, 'OTP for Satva', doc.otp);
     res.status(200).json({status: true, message: 'User Regissterd'});
   } catch (e) {
     console.error('UserController::Failed to registerUser', e);
+    res.status(500).json({status: false, message: 'Error' + e});
+  }
+}
+
+export async function resendOTP(req: express.Request, res: express.Response) {
+  try {
+    checkRequired(req.body, ['email']);
+    const {email, otp} = req.body;
+    const user = await UserModel.findOne({email: email});
+    if (user) {
+      user.otp = String(randomInt(1000, 9999));
+      await sendMail(email, 'OTP for Satva', user.otp);
+      await user.save();
+    } else {
+      throw `User Not found`;
+    }
+    res.status(200).json({status: true, message: 'success'});
+  } catch (e) {
+    console.error('UserController::Failed to verifyOtp', e);
+    res.status(500).json({status: false, message: 'Error' + e});
+  }
+}
+
+export async function verifyOtp(req: express.Request, res: express.Response) {
+  try {
+    checkRequired(req.body, ['email', 'otp']);
+    const {email, otp} = req.body;
+    const user = await UserModel.findOne({email: email, otp: otp});
+    if (user) {
+      user.isVerified = true;
+      await user.save();
+    } else {
+      throw `Invalid Otp`;
+    }
+    res.status(200).json({status: true, message: 'success'});
+  } catch (e) {
+    console.error('UserController::Failed to verifyOtp', e);
     res.status(500).json({status: false, message: 'Error'});
   }
 }
