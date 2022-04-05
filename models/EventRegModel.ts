@@ -2,7 +2,6 @@ import {Document, model, Schema} from 'mongoose';
 
 export interface EventRegistration extends Document {
   eventId: string;
-  userId: string;
   branch: string;
   sem: number;
   username: string;
@@ -15,7 +14,6 @@ export interface EventRegistration extends Document {
 
 const eventModel = new Schema<EventRegistration>({
   eventId: String,
-  userId: String,
   branch: String,
   sem: Number,
   username: String,

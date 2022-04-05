@@ -4,9 +4,9 @@ import {hashString} from './Utility';
 
 export const verifyUser = async (req: Request) => {
   try {
-    const {username, password} = req.body;
+    const {captainMail, password} = req.body;
     const usr = await UserModel.findOne({
-      name: username,
+      email: captainMail,
       password: hashString(password),
     });
 

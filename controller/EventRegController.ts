@@ -30,16 +30,43 @@ export async function addRegistraion(
 ) {
   try {
     verifyUser(req);
-    checkRequired(req.body, ['eventId', 'userId', 'sem', 'branch']);
-    const {eventId, userId, sem, branch} = req.body;
+    checkRequired(req.body, [
+      'eventId',
+      'username',
+      'registernumber',
+      'phone',
+      'branch',
+      'sem',
+      'email',
+      'paymentDone',
+      'captainMail',
+    ]);
+
+    const {
+      eventId,
+      username,
+      registernumber,
+      phone,
+      branch,
+      sem,
+      email,
+      paymentDone,
+      captainMail,
+    } = req.body;
+
     const event = await findEvent(eventId);
     await checkEventRegistrationLimit(event, branch);
 
     const doc = new EventRegModel();
     doc.eventId = eventId;
-    doc.userId = userId;
-    doc.sem = sem;
+    doc.username = username;
+    doc.registernumber = registernumber;
+    doc.phone = phone;
     doc.branch = branch;
+    doc.sem = sem;
+    doc.email = email;
+    doc.paymentDone = paymentDone;
+    doc.captainMail = captainMail;
     await doc.save();
 
     res.status(200).json({status: true, message: 'Success'});
