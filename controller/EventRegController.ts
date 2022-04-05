@@ -1,7 +1,28 @@
 import express from 'express';
 import {verifyUser} from '../auth';
+import {Event, EventModel} from '../models/EventModel';
 import {EventRegModel} from '../models/EventRegModel';
 import {checkRequired} from '../Utility';
+
+async function findEvent(eventId: string) {
+  const event = await EventModel.findOne({_id: eventId});
+  if (!event) {
+    throw 'Invalid Event id';
+  }
+  return event;
+}
+
+async function checkEventRegistrationLimit(event: Event, branch: string) {
+  const registrations = await EventRegModel.find({
+    eventId: event._id,
+    branch: branch,
+  });
+  const count = registrations.length;
+
+  if (count >= event.maxUsersPerTeam) {
+    throw 'Error max participants limit reached';
+  }
+}
 
 export async function addRegistraion(
   req: express.Request,
@@ -11,6 +32,8 @@ export async function addRegistraion(
     verifyUser(req);
     checkRequired(req.body, ['eventId', 'userId', 'sem', 'branch']);
     const {eventId, userId, sem, branch} = req.body;
+    const event = await findEvent(eventId);
+    await checkEventRegistrationLimit(event, branch);
 
     const doc = new EventRegModel();
     doc.eventId = eventId;

@@ -10,26 +10,27 @@ endif
 set shortmess=aoO
 argglobal
 %argdel
-edit routes/EventRoutes.ts
+edit controller/EventRegController.ts
 argglobal
-balt index.ts
-let s:l = 6 - ((5 * winheight(0) + 22) / 45)
+balt routes/EventRoutes.ts
+let s:l = 24 - ((23 * winheight(0) + 22) / 45)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 6
-normal! 017|
+keepjumps 24
+normal! 0
 tabnext 1
-badd +26 index.ts
-badd +9 routes/UserRoutes.ts
-badd +61 controller/UserController.ts
-badd +7 models/UserModel.ts
-badd +21 models/EventModel.ts
-badd +69 controller/EventController.ts
+badd +16 routes/EventRoutes.ts
+badd +30 index.ts
+badd +6 routes/UserRoutes.ts
+badd +13 controller/UserController.ts
+badd +15 models/UserModel.ts
+badd +3 models/EventModel.ts
+badd +54 controller/EventController.ts
 badd +11 models/EventRegModel.ts
-badd +11 controller/EventRegController.ts
-badd +17 routes/EventRoutes.ts
-badd +17 auth.ts
+badd +23 controller/EventRegController.ts
+badd +13 auth.ts
+badd +58 Utility.ts
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
