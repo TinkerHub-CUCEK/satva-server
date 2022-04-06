@@ -72,7 +72,7 @@ export async function addRegistraion(
     res.status(200).json({status: true, message: 'Success'});
   } catch (e) {
     console.error('EventRegistration::Failed to register event');
-    res.status(500).json({status: false, message: 'Error'});
+    res.status(500).json({status: false, message: 'Error' + e});
   }
 }
 
@@ -88,7 +88,7 @@ export async function listRegistraions(
     res.status(200).json({status: true, data: registrations});
   } catch (e) {
     console.error('EventRegistration::Failed to list registrations');
-    res.status(500).json({status: false, message: 'Error'});
+    res.status(500).json({status: false, message: 'Error' + e});
   }
 }
 
