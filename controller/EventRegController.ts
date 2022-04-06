@@ -1,7 +1,7 @@
 import express from 'express';
 import {verifyUser} from '../auth';
 import {Event, EventModel} from '../models/EventModel';
-import {EventRegModel} from '../models/EventRegModel';
+import {EventRegModel, Participant} from '../models/EventRegModel';
 import {checkRequired} from '../Utility';
 
 async function findEvent(eventId: string) {
@@ -12,15 +12,21 @@ async function findEvent(eventId: string) {
   return event;
 }
 
-async function checkEventRegistrationLimit(event: Event, branch: string) {
+async function checkMaxTeamsPerBranch(event: Event, branch: string) {
   const registrations = await EventRegModel.find({
     eventId: event._id,
     branch: branch,
   });
-  const count = registrations.length;
+  const teamCount = registrations.length;
 
-  if (count >= event.maxUsersPerTeam) {
-    throw 'Error max participants limit reached';
+  if (teamCount >= event.maxTeamsPerBranch) {
+    throw `Max Team Per Branch Reached. Max allowed = ${event.maxTeamsPerBranch}`;
+  }
+}
+
+function checkMaxUsersPerTeam(event: Event, count: number) {
+  if (count > event.maxUsersPerTeam) {
+    throw `Max Members Per Team Reached. Max allowed = ${event.maxUsersPerTeam}`;
   }
 }
 
@@ -32,44 +38,34 @@ export async function addRegistraion(
     verifyUser(req);
     checkRequired(req.body, [
       'eventId',
-      'username',
-      'registernumber',
-      'phone',
       'branch',
-      'sem',
-      'email',
-      'paymentDone',
       'captainMail',
       'branchTeamId',
+      'participants',
     ]);
 
-    const {
-      eventId,
-      username,
-      registernumber,
-      phone,
-      branch,
-      sem,
-      email,
-      paymentDone,
-      captainMail,
-      branchTeamId,
-    } = req.body;
+    const {eventId, branch, captainMail, branchTeamId, participants} = req.body;
 
     const event = await findEvent(eventId);
-    await checkEventRegistrationLimit(event, branch);
+    await checkMaxTeamsPerBranch(event, branch);
+    checkMaxUsersPerTeam(event, participants.length);
+
+    participants.forEach((p: Participant) =>
+      checkRequired(p, [
+        'sem',
+        'username',
+        'registernumber',
+        'phone',
+        'email',
+        'paymentDone',
+      ]),
+    );
 
     const doc = new EventRegModel();
     doc.eventId = eventId;
-    doc.username = username;
-    doc.registernumber = registernumber;
-    doc.phone = phone;
-    doc.branch = branch;
-    doc.sem = sem;
-    doc.email = email;
-    doc.paymentDone = paymentDone;
     doc.captainMail = captainMail;
     doc.branchTeamId = branchTeamId;
+    doc.participants = participants;
     await doc.save();
 
     res.status(200).json({status: true, message: 'Success'});
