@@ -10,6 +10,7 @@ export interface EventRegistration extends Document {
   email: string;
   paymentDone: boolean;
   captainMail: string;
+  branchTeamId: number;
 }
 
 const eventModel = new Schema<EventRegistration>({
@@ -22,6 +23,7 @@ const eventModel = new Schema<EventRegistration>({
   email: String,
   paymentDone: Boolean,
   captainMail: String,
+  branchTeamId: Number,
 });
 
 export const EventRegModel = model<EventRegistration>('eventreg', eventModel);

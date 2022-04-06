@@ -9,12 +9,21 @@ export async function createEvent(req: express.Request, res: express.Response) {
     checkRequired(req.body, [
       'name',
       'startTime',
+      'endTime',
       'maxUsersPerTeam',
       'minUsersPerTeam',
       'status',
+      'maxTeamsPerBranch',
     ]);
-    const {name, startTime, endTime, maxUsersPerTeam, minUsersPerTeam, status} =
-      req.body;
+    const {
+      name,
+      startTime,
+      endTime,
+      maxUsersPerTeam,
+      minUsersPerTeam,
+      status,
+      maxTeamsPerBranch,
+    } = req.body;
 
     const doc = new EventModel();
     doc.name = name;
@@ -23,6 +32,7 @@ export async function createEvent(req: express.Request, res: express.Response) {
     doc.maxUsersPerTeam = maxUsersPerTeam;
     doc.minUsersPerTeam = minUsersPerTeam;
     doc.status = status;
+    doc.maxTeamsPerBranch = maxTeamsPerBranch;
     await doc.save();
 
     res.status(200).json({status: true, message: 'Success'});
@@ -35,17 +45,34 @@ export async function createEvent(req: express.Request, res: express.Response) {
 export async function updateEvent(req: express.Request, res: express.Response) {
   try {
     verifyAdmin(req);
-    checkRequired(req.body, ['name']);
-    const {name, startTime, endTime, maxUsersPerTeam, minUsersPerTeam} =
-      req.body;
+    checkRequired(req.body, [
+      'name',
+      'startTime',
+      'endTime',
+      'maxUsersPerTeam',
+      'minUsersPerTeam',
+      'status',
+      'maxTeamsPerBranch',
+    ]);
+    const {
+      name,
+      startTime,
+      endTime,
+      maxUsersPerTeam,
+      minUsersPerTeam,
+      status,
+      maxTeamsPerBranch,
+    } = req.body;
 
     const doc = await EventModel.findOne({name: name});
     if (doc) {
       doc.name = name;
-      startTime && (doc.startTime = startTime);
-      endTime && (doc.endTime = endTime);
-      maxUsersPerTeam && (doc.maxUsersPerTeam = maxUsersPerTeam);
-      minUsersPerTeam && (doc.minUsersPerTeam = minUsersPerTeam);
+      doc.startTime = startTime;
+      doc.endTime = endTime;
+      doc.maxUsersPerTeam = maxUsersPerTeam;
+      doc.minUsersPerTeam = minUsersPerTeam;
+      doc.status = status;
+      doc.maxUsersPerTeam = maxUsersPerTeam;
       await doc.save();
     } else {
       throw 'Error Event not found';

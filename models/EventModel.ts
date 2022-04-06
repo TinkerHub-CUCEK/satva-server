@@ -7,6 +7,7 @@ export interface Event extends Document {
   maxUsersPerTeam: number;
   minUsersPerTeam: number;
   status: string;
+  maxTeamsPerBranch: number;
 }
 
 const eventModel = new Schema<Event>({
@@ -19,6 +20,7 @@ const eventModel = new Schema<Event>({
   maxUsersPerTeam: Number,
   minUsersPerTeam: Number,
   status: String,
+  maxTeamsPerBranch: Number,
 });
 
 export const EventModel = model<Event>('event', eventModel);
