@@ -40,6 +40,7 @@ export async function addRegistraion(
       'email',
       'paymentDone',
       'captainMail',
+      'branchTeamId',
     ]);
 
     const {
@@ -52,6 +53,7 @@ export async function addRegistraion(
       email,
       paymentDone,
       captainMail,
+      branchTeamId,
     } = req.body;
 
     const event = await findEvent(eventId);
@@ -67,6 +69,7 @@ export async function addRegistraion(
     doc.email = email;
     doc.paymentDone = paymentDone;
     doc.captainMail = captainMail;
+    doc.branchTeamId = branchTeamId;
     await doc.save();
 
     res.status(200).json({status: true, message: 'Success'});
