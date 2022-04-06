@@ -28,10 +28,6 @@ function checkMaxUsersPerTeam(event: Event, count: number) {
   if (count > event.maxUsersPerTeam) {
     throw `Max Members Per Team Reached. Max allowed = ${event.maxUsersPerTeam}`;
   }
-
-  if (count == 0) {
-    throw 'Atleast 1 participant is required';
-  }
 }
 
 export async function addRegistraion(
