@@ -67,6 +67,7 @@ export async function addRegistraion(
 
     const doc = new EventRegModel();
     doc.eventId = eventId;
+    doc.branch = branch;
     doc.captainMail = captainMail;
     doc.branchTeamId = branchTeamId;
     doc.participants = participants;

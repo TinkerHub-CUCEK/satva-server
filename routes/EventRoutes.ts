@@ -15,7 +15,7 @@ EventRouter.post('/create', createEvent);
 EventRouter.post('/update', updateEvent);
 EventRouter.post('/register', addRegistraion);
 EventRouter.get('/listevents', listEvents);
-EventRouter.get('/listregistrations', listRegistraions);
+EventRouter.post('/listregistrations', listRegistraions);
 // EventRouter.delete('/register', addRegistraion);
 
 export default EventRouter;
