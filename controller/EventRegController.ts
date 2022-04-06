@@ -76,6 +76,45 @@ export async function addRegistraion(
   }
 }
 
+export async function updateRegistration(
+  req: express.Request,
+  res: express.Response,
+) {
+  try {
+    verifyUser(req);
+    checkRequired(req.body, ['regId', 'eventId', 'participants']);
+
+    const {eventId, regId, participants} = req.body;
+
+    const event = await findEvent(eventId);
+    checkMaxUsersPerTeam(event, participants.length);
+
+    participants.forEach((p: Participant) =>
+      checkRequired(p, [
+        'sem',
+        'username',
+        'registernumber',
+        'phone',
+        'email',
+        'paymentDone',
+      ]),
+    );
+
+    const doc = await EventRegModel.findOne({_id: regId});
+    if (doc) {
+      doc.participants = participants;
+      await doc.save();
+    } else {
+      throw 'Failed to find registration';
+    }
+
+    res.status(200).json({status: true, message: 'Success'});
+  } catch (e) {
+    console.error('EventRegistration::Failed to register event');
+    res.status(500).json({status: false, message: 'Error' + e});
+  }
+}
+
 export async function listRegistraions(
   req: express.Request,
   res: express.Response,

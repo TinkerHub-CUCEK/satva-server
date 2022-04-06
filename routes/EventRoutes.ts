@@ -7,6 +7,7 @@ import {
 import {
   addRegistraion,
   listRegistraions,
+  updateRegistration,
 } from '../controller/EventRegController';
 
 const EventRouter = Router();
@@ -14,6 +15,7 @@ const EventRouter = Router();
 EventRouter.post('/create', createEvent);
 EventRouter.post('/update', updateEvent);
 EventRouter.post('/register', addRegistraion);
+EventRouter.post('/updateregistraion', updateRegistration);
 EventRouter.get('/listevents', listEvents);
 EventRouter.post('/listregistrations', listRegistraions);
 // EventRouter.delete('/register', addRegistraion);
