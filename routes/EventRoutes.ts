@@ -15,7 +15,7 @@ const EventRouter = Router();
 EventRouter.post('/create', createEvent);
 EventRouter.post('/update', updateEvent);
 EventRouter.post('/register', addRegistraion);
-EventRouter.post('/updateregistraion', updateRegistration);
+EventRouter.post('/updateregistration', updateRegistration);
 EventRouter.get('/listevents', listEvents);
 EventRouter.post('/listregistrations', listRegistraions);
 // EventRouter.delete('/register', addRegistraion);
