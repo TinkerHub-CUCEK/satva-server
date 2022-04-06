@@ -29,11 +29,12 @@ export async function registerUser(
 
 export async function loginUser(req: express.Request, res: express.Response) {
   try {
-    checkRequired(req.body, ['email', 'password']);
-    const {email, password} = req.body;
+    checkRequired(req.body, ['email', 'password', 'branch']);
+    const {email, password, branch} = req.body;
     const user = await UserModel.findOne({
       email: email,
       password: hashString(password),
+      branch: branch,
     });
     if (!user) {
       throw 'Invalid credentials';

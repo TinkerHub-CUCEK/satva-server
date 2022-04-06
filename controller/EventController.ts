@@ -72,7 +72,7 @@ export async function updateEvent(req: express.Request, res: express.Response) {
       doc.maxUsersPerTeam = maxUsersPerTeam;
       doc.minUsersPerTeam = minUsersPerTeam;
       doc.status = status;
-      doc.maxUsersPerTeam = maxUsersPerTeam;
+      doc.maxTeamsPerBranch = maxTeamsPerBranch;
       await doc.save();
     } else {
       throw 'Error Event not found';
@@ -81,7 +81,7 @@ export async function updateEvent(req: express.Request, res: express.Response) {
     res.status(200).json({status: true, message: 'Success'});
   } catch (e) {
     console.error('EventController::Failed o create event');
-    res.status(500).json({status: false, message: 'Error'});
+    res.status(500).json({status: false, message: 'Error' + e});
   }
 }
 
@@ -91,6 +91,6 @@ export async function listEvents(_req: express.Request, res: express.Response) {
     res.status(200).json({status: true, data: events});
   } catch (e) {
     console.error('EventController::Failed to list events');
-    res.status(500).json({status: false, message: 'Error'});
+    res.status(500).json({status: false, message: 'Error' + e});
   }
 }
